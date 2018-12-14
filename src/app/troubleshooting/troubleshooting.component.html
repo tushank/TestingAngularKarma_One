@@ -1,0 +1,6 @@
+<div *ngIf="error" class="alert alert-danger ml-2 mr-2 mt-2">
+    {{error}}
+    </div> 
+<app-customer-info-search-panel (submitFormEvent)="searchCustomer($event)"></app-customer-info-search-panel>
+<hr *ngIf="!tableConfig">
+<app-matching-customer-list [tableInfo]="tableConfig" (tableEvent)="handleTableEvent($event)"></app-matching-customer-list>

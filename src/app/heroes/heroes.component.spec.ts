@@ -1,4 +1,4 @@
-import { HeroesComponent } from "./heroes.component";
+import { HeroesComponent } from './heroes.component';
 import { of } from 'rxjs';
 
 describe('HeroesComponent', () => {

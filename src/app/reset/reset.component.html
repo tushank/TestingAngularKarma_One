@@ -1,0 +1,36 @@
+<div *ngIf="error" class="alert alert-danger ml-2 mr-2 mt-2">
+  {{error}}
+</div>
+<div class="customer-support">
+  <div class="cs-reset">
+    <div class="reset-text">
+      <p>During the User Registration process or while adding additional cards in the mobile application, the card may
+        get locked from the registration process. To unlock the card from the registration process, enter the
+        cardholder's complete card number (PAN) below. Once the card is unlocked from the registration process, the
+        cardholder can resume the Registration or Add Card process. </p>
+    </div>
+    <form class="login-form form-horizontal form-signIn" #f="ngForm" (ngSubmit)="reset(f.value)">
+      <div class="form-group clearfix">
+        <label for="cardNo" class="col-sm-2 col-form-label">Enter card number:</label>
+        <div class="col-sm-4 mc-login-text">
+          <input type="text" required minlength="12" maxlength="30" pattern="^[0-9-]*$" class="form-control" id="cardNo"
+            name="cardNo" ngModel #cardNo="ngModel" placeholder="Enter Card Number" />
+        </div>
+        <div *ngIf="cardNo.dirty && !cardNo.valid" class="alert alert-danger col-sm-4 inline-block">
+          <span *ngIf="cardNo.errors.required">Card No. is required</span>
+          <span *ngIf="cardNo.errors.minlength">The length of Card Number should be minimum
+             {{cardNo.errors.minlength.requiredLength}}.</span>
+          <span *ngIf="cardNo.errors.maxlength">Card Number should be maximum
+            {{cardNo.errors.maxlength.requiredLength}}.</span>
+          <span *ngIf="cardNo.errors.pattern"> Please enter a valid card number. Enter any hyphens if they exist.</span>
+        </div>
+      </div>
+      <div class="btn btn-padding">
+        <button class="btn mc-btn" [disabled]="!f.valid" type="submit">Reset</button>
+      </div>
+      <div class="btn">
+        <button class="btn" type="reset">Clear</button>
+      </div>
+    </form>
+  </div>
+</div>

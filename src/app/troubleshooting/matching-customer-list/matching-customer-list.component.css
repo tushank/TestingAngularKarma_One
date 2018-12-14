@@ -1,0 +1,115 @@
+.container-fluid{
+    /* margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 15px;
+    padding-right: 15px; */
+}
+
+.panel-header{   
+    /* margin-left: -15px;
+    margin-right: -15px; 
+    background-color: #E0ECFF;
+    border:1px solid #95B8E7;
+    padding: 5px;
+    background: -webkit-linear-gradient(top,#EFF5FF 0,#E0ECFF 100%);
+    background: -moz-linear-gradient(top,#EFF5FF 0,#E0ECFF 100%);
+    background: -o-linear-gradient(top,#EFF5FF 0,#E0ECFF 100%);
+    background: linear-gradient(to bottom,#EFF5FF 0,#E0ECFF 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#EFF5FF,endColorstr=#E0ECFF,GradientType=0); */
+
+    height: 45px;
+    
+    background-color: #01305e;
+    border: 1px solid #01305e;
+    padding: 12px;
+    color: #fff;
+}
+
+.panel-header .panel-title{
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    height: 16px;
+    line-height: 16px;
+}
+
+.toggle-btn{
+    float: right;
+    height: 20px;
+    width: 20px;
+    margin-top: -18px;
+    font-size: 15px;
+    padding: 0px;
+    background: none;
+    outline: none;
+    border: 0px solid #95b8e7;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.toggle-btn i{
+    display: block;
+}
+
+.panel-body{
+    /* margin-left: -15px;
+    margin-right: -15px;  */
+    border: 1px solid #ccc;
+    border-top: 0;
+    height: 0px;
+    min-height: 0px;
+    overflow: hidden;
+    padding: 0px;
+    transition: height 0.5s;
+    clear: both;
+    box-shadow: 3px 3px 10px -2px #ccc;
+
+}
+
+.panel-body.expanded{
+    height: 270px;
+
+}
+
+
+.loader{
+    background: rgba(0,0,0,.15);
+    position: absolute;
+    height: calc(100% - 45px);
+    z-index: 1;
+    width: calc(100% - 31px);
+    padding-top: 140px;
+
+}
+
+.loader .loader-msg {
+    height: 80px;
+    padding: 4px;
+    width: 100px;
+    font-size: 14px;
+    background: #01305e;
+    color: white;
+    border-radius: 6px;
+    position: absolute;
+    opacity: 1;
+    /* border: 2px solid #5a7ea4; */
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+
+.loader .loader-msg img{
+    width: 30px;
+    margin: 5px 5px;
+ }
+
+
+ .loader.empty-table{
+    margin-top: -55px;
+    height: 10px;
+    padding: 45px;
+ }
+

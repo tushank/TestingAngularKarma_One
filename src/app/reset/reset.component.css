@@ -1,0 +1,11 @@
+.customer-support {
+    font-size: 14px;   
+    color: #000000;
+    border: 2px solid #95B8E7;
+}
+.cs-reset{
+    margin: 10px 12px 0px 12px;
+}
+.inline-block{
+    display: inline-block;
+}

@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="grayed-header">
+                Enter Customer Information
+            </div>
+
+
+            <div class="search-panel">
+                <form [formGroup]="customerInfoForm">
+                    <div class="fields-inline-wrapper">
+                        <div class="fields-wrapper form-group">
+                            <label class="search-field-label col-form-label">Card Number: </label>
+                            <input formControlName="cardNumber" class="search-fields form-control" maxlength="4"
+                                pattern="[0-9]{0,4}" placeholder="Enter last four digits">
+                        </div>
+                        <div class="fields-wrapper form-group">
+                            <label class="search-field-label col-form-label">Account Number: </label>
+                            <input formControlName="accountNumber" class="search-fields form-control" maxlength="4"
+                                pattern="[0-9]{0,4}" placeholder="Enter last four digits">
+                        </div>
+                        <div class="fields-wrapper form-group">
+                            <label class="search-field-label col-form-label">Customer Name: </label>
+                            <input formControlName="customerName" class="search-fields form-control" placeholder="Enter partial/full name">
+                        </div>
+                        <div class="fields-wrapper form-group">
+                            <label class="search-field-label col-form-label">Customer ID:</label>
+                            <input formControlName="customerId" class="search-fields form-control" placeholder="Enter full ID">
+                        </div>
+                        <div class="fields-wrapper subscriber-ref-id form-group">
+                            <label class="search-field-label col-form-label">Subscriber Reference ID: </label>
+                            <input formControlName="subscriberRefId" class="search-fields form-control" placeholder="Enter Subscriber Ref ID">
+                        </div>
+                        <div class="fields-wrapper subscriber-ref-id form-group">
+                                <label class="search-field-label col-form-label">Select FI: </label>
+                               <app-auto-complete-box 
+                               [list]="fiList" [defaultValue]="'ALL'" [property]="'fiName'" [formGroup]="customerInfoForm" [formControlNameProperty]="'searchByFIId'"
+                               (inputChange)="updateFiId($event)"
+                               ></app-auto-complete-box>
+                        </div>
+                        
+                        <div class="fields-wrapper action-items form-group">
+                            <button class="control-buttons" (click)="submitCustomerInfo()"><img src="./assets/images/search_icon.jpg"
+                                    class="search-icon"></button>
+                            <button class="control-buttons" type="reset"><img src="./assets/images/clear_icon.jpg"
+                                    class="reset-icon"></button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

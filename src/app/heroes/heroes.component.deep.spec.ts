@@ -45,4 +45,8 @@ describe('HeroesComponent (deep tests)', () => {
             expect(heroComponentDEs[i].componentInstance.hero).toEqual(HEROES[i]);
         }
     });
+
+    it(`should call heroService.deleteHero when hero components delete button is clicked`, () => {
+        
+    })
 });
