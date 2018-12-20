@@ -1,0 +1,13 @@
+<div *ngIf="error" class="alert alert-danger ml-2 mr-2 mt-2">
+    {{error}}
+</div>
+<div class="container-fluid">
+   
+        <app-custom-data-table2 [tableInfo]="tableConfig" (pageListChangeEvent)="handlePageListChangeEvent($event)"
+            (goToFirstPageEvent)="handleGoToFirstPageEvent($event)" (goToPreviousPageEvent)="handleGoToPreviousPageEvent($event)"
+            (goToNextPageEvent)="handleGoToNextPageEvent($event)" (goToLastPageEvent)="handleGoToLastPageEvent($event)"
+            (pageNumberChangeEvent)="handlePageNumberChangeEvent($event)" (refreshTableEvent)="handleRefreshTableEvent($event)">
+        </app-custom-data-table2>
+
+
+</div>

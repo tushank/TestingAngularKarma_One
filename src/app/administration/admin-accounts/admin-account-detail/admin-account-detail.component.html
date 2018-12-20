@@ -1,0 +1,63 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">FORM</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-sm-offset-1 col-md-offset-2">
+        <form (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+          <div class="form-group">
+            <label for="loginName">Login Name</label>
+            <input type="text" id="loginName" class="form-control" [(ngModel)]="model.loginName" #loginName="ngModel" name="loginName"
+              [ngClass]="{ 'is-invalid': f.submitted && loginName.invalid && loginName.touched }" required>
+            <div *ngIf="loginName.invalid && loginName.touched" class="invalid-feedback">
+              <div *ngIf="loginName.errors.required">First Name is required</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" disabled="!updatedata" name="password" [(ngModel)]="model.password" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.invalid && password.touched }"
+              required minlength="6" />
+            <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
+              <div *ngIf="password.errors.required">Password is required</div>
+              <div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" class="form-control" name="fullName" [(ngModel)]="model.fullName" #fullName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && fullName.invalid && fullName.touched }"
+              required />
+            <div *ngIf="fullName.invalid && fullName.touched" class="invalid-feedback">
+              <div *ngIf="fullName.errors.required">Full Name is required</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="adminDescription">Admin Description</label>
+            <input type="text" class="form-control" name="adminDescription" [(ngModel)]="model.adminDescription" #adminDescription="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && adminDescription.invalid && adminDescription.touched }" required />
+            <div *ngIf="adminDescription.invalid && adminDescription.touched" class="invalid-feedback">
+              <div *ngIf="adminDescription.errors.required">Admin Description is required</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="adminGroupId ">Admin Groups</label>
+            <select id="adminGroups" class="form-control" [(ngModel)]="model.adminGroupId" name="adminGroupId">
+              <option *ngFor="let  adminGroupsDTOList of adminGroupsDTOLists" [value]="adminGroupsDTOList.adminGroupId">{{adminGroupsDTOList.adminGroupName}}</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit</button>
+          <div class="btn">
+            <button class="btn" type="reset">Clear</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

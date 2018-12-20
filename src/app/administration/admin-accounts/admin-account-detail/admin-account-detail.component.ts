@@ -6,6 +6,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { adminAccountConstants } from '../../../../constants/admin-account.constants';
 import { GlobalConstants } from '../../../../constants/global-constants';
 import { adminGroupConstants } from '../../../../constants/admin-group.constants';
+import { AdminAccountService } from '../../../../services/administration/admin-account/admin-account.service';
 @Component({
   selector: 'app-admin-account-detail',
   templateUrl: './admin-account-detail.component.html',
@@ -14,11 +15,12 @@ import { adminGroupConstants } from '../../../../constants/admin-group.constants
 export class AdminAccountDetailComponent implements OnInit {
   @ViewChild('f') signupForm: NgForm;
   defaultAdminGroups = '';
-  model: IAdminAccount;
+  model: any = {};
   submitted = false;
   adminGroupsDTOLists: IAdminGroupsDTOList[];
   error: string;
   ADD_NEW_USER = -1;
+  updatedata: any;
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -28,18 +30,25 @@ export class AdminAccountDetailComponent implements OnInit {
     })
   };
 
-  constructor(private http: HttpClient, private globalConstants: GlobalConstants, public bsModalRef: BsModalRef) { }
+  constructor(private http: HttpClient, private globalConstants: GlobalConstants,
+    public bsModalRef: BsModalRef, private dataService: AdminAccountService) { }
 
 
   ngOnInit() {
-    this.model = {
-      loginName: '',
-      password: '',
-      fullName: '',
-      adminDescription: '',
-      adminGroupId: null
-    };
     this.getAdminGroupList();
+    this.dataService.currentMessage.subscribe(message => {
+      this.updatedata = message;
+      if (this.updatedata) {
+        this.model = this.updatedata;
+        this.signupForm.form.patchValue({
+          loginName: this.model.loginName,
+          password: this.model.password,
+          fullName: this.model.fullName,
+          adminDescription: this.model.adminDescription,
+          adminGroupId: this.model.adminGroupName
+        });
+      }
+    });
   }
 
   /**
@@ -58,9 +67,7 @@ export class AdminAccountDetailComponent implements OnInit {
       this.globalConstants.FI_SERVER_BASE_URL + adminGroupConstants.LIST_ALL.URL,
       requestData, this.httpOptions).subscribe((data: any) => {
         if (data) {
-          console.log('data admin group : ', data.adminGroupsDTOList);
           this.adminGroupsDTOLists = data.adminGroupsDTOList;
-          console.log('Filtered DTO List : ', this.adminGroupsDTOLists);
         }
       }, error => this.error = error);
   }
@@ -74,10 +81,14 @@ export class AdminAccountDetailComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
     this.model.loginName = this.signupForm.value.loginName;
-    this.model.password = this.signupForm.value.password;
     this.model.fullName = this.signupForm.value.fullName;
     this.model.adminDescription = this.signupForm.value.adminDescription;
     this.model.adminGroupId = Number(this.signupForm.value.adminGroupId);
+    if (this.updatedata) {
+      this.model.password = null;
+    } else {
+      this.model.password = this.signupForm.value.password;
+    }
     this.postdataOnSubmit(this.model);
     this.signupForm.reset();
   }
@@ -97,7 +108,12 @@ export class AdminAccountDetailComponent implements OnInit {
     reqObj.adminAccountsDTO.fullName = accountUserDeatil.fullName;
     reqObj.adminAccountsDTO.adminDescription = accountUserDeatil.adminDescription;
     reqObj.adminAccountsDTO.adminGroupId = accountUserDeatil.adminGroupId;
-    reqObj.adminAccountsDTO.adminAccountId = this.ADD_NEW_USER;
+    if (this.updatedata) {
+      reqObj.adminAccountsDTO.adminAccountId = this.updatedata.adminAccountId;
+    } else {
+      reqObj.adminAccountsDTO.adminAccountId = this.ADD_NEW_USER;
+    }
+    console.log('reqObj to post : ', reqObj);
     return reqObj;
   }
 
@@ -112,6 +128,7 @@ export class AdminAccountDetailComponent implements OnInit {
       this.globalConstants.FI_SERVER_BASE_URL + adminAccountConstants.SAVE.URL,
       this.getRequestDataAdminAccount(accountUserDeatil), this.httpOptions).subscribe((data: any) => {
         if (data) {
+          this.bsModalRef.hide();
           console.log('post data : ', data);
           alert('data posted');
         }
