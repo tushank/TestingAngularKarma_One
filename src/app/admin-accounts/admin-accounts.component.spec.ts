@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SystemMessagesComponent } from './system-messages.component';
+import { AdminAccountsComponent } from './admin-accounts.component';
 
-describe('SystemMessagesComponent', () => {
-  let component: SystemMessagesComponent;
-  let fixture: ComponentFixture<SystemMessagesComponent>;
+describe('AdminAccountsComponent', () => {
+  let component: AdminAccountsComponent;
+  let fixture: ComponentFixture<AdminAccountsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SystemMessagesComponent ]
+      declarations: [ AdminAccountsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SystemMessagesComponent);
+    fixture = TestBed.createComponent(AdminAccountsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

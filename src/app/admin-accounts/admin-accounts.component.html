@@ -3,7 +3,7 @@
     <button type="button" class="btn btn-primary" (click)="openModalWithComponent()">Add New</button>
   </div>
   <div>
-    <app-custom-data-table [tableInfo]="tableConfig" (linkClickEvent)="handleUpdateClickEvent($event)" (refreshTableEvent)="handleRefreshTableEvent($event)">
+    <app-custom-data-table [tableInfo]="tableConfig" (linkClickEvent)="handleUpdateClickEvent($event)">
     </app-custom-data-table>
   </div>
 </div>

@@ -7,8 +7,9 @@ import { adminAccountConstants } from '../../../constants/admin-account.constant
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { HttpClientService } from '../../../services/http-client.service';
 import { GlobalConstants } from '../../../constants/global-constants';
-import { AdminAccountService } from '../../../services/administration/admin-account/admin-account.service';
-import { Observable } from '../../../../../node_modules/rxjs';
+import { AdminAccountCommunicationService } from '../../../services/administration/admin-account/admin-account-communication.service';
+import { CustomModalComponent } from '../../../shared/custom-modal/custom-modal.component';
+import { MODAL_CONFIG } from '../../../shared/config/custom-modal.config';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class AdminAccountsComponent implements OnInit {
   error: string;
   updatedata: any;
   deleteData: any;
+  modalConfig: any;
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -37,21 +39,25 @@ export class AdminAccountsComponent implements OnInit {
   constructor(private http: HttpClient, private httpClient: HttpClientService,
     private modalService: BsModalService, private globalConstants: GlobalConstants,
     private _systemEventServices: SystemEventsService,
-    private dataService: AdminAccountService) {}
+    private adminAccountService: AdminAccountCommunicationService) {
+      this.modalConfig = MODAL_CONFIG.BASE_CONFIG;
+    }
   @Input() tableInfo: ITableInfo;
 
   ngOnInit() {
     this.updateTable();
-    this.dataService.currentMessage.subscribe(message => {
-      this.updateTable();
+    this.adminAccountService.currentMessage.subscribe(message => {
       this.updatedata = message;
+    });
+
+    this.adminAccountService.getRefreshAccountTable().subscribe(data => {
+      this.updateTable();
     });
   }
 
   /**
     * @name updateTable
     * @desc get the list of all record to display it on data table
-    * @param {number,number}
     * @returns {Observable}
     */
   updateTable() {
@@ -74,18 +80,17 @@ export class AdminAccountsComponent implements OnInit {
   /**
     * @name getEventsList
     * @desc set the request object for data table list record api call
-    * @param {object}
+    * @param reqObj
     * @returns {object}
     */
   getEventsList(reqObj) {
     return this.httpClient.post(this.globalConstants.FI_SERVER_BASE_URL + adminAccountConstants.LIST_ALL.URL,
-      reqObj, this.globalConstants.CONTENT_TYPE_JSON, true);
+      reqObj, this.globalConstants.CONTENT_TYPE_JSON, false);
   }
 
   /**
     * @name getGridConfig
     * @desc set the configuration of data table
-    * @param {void}
     * @returns {void}
     */
   getGridConfig() {
@@ -95,11 +100,10 @@ export class AdminAccountsComponent implements OnInit {
   /**
     * @name openModalWithComponent
     * @desc open the the pop-up model for addition or updating the form
-    * @param {void}
     * @returns {void}
     */
   openModalWithComponent() {
-    this.dataService.changeMessage(null);
+    this.adminAccountService.changeMessage(null);
     this.bsModalRef = this.modalService.show(AdminAccountDetailComponent);
     this.bsModalRef.content.closeBtnName = 'Close';
   }
@@ -107,7 +111,7 @@ export class AdminAccountsComponent implements OnInit {
   /**
     * @name openModal
     * @desc open the the pop-up model for delection of record
-    * @param {TemplateRef}
+    * @param template
     * @returns {void}
     */
   openModal(template: TemplateRef<any>) {
@@ -117,7 +121,6 @@ export class AdminAccountsComponent implements OnInit {
   /**
     * @name confirm
     * @desc confirm the dellte functionality for a record in pop-up model
-    * @param {void}
     * @returns {void}
     */
   confirm(): void {
@@ -128,7 +131,6 @@ export class AdminAccountsComponent implements OnInit {
   /**
     * @name decline
     * @desc cancel the dellte functionality in pop-up model
-    * @param {void}
     * @returns {void}
     */
   decline(): void {
@@ -138,7 +140,7 @@ export class AdminAccountsComponent implements OnInit {
   /**
     * @name handleUpdateClickEvent
     * @desc for handle edit and delete click functionality
-    * @param {object}
+    * @param $event
     * @returns {void}
     */
   handleUpdateClickEvent($event) {
@@ -146,7 +148,7 @@ export class AdminAccountsComponent implements OnInit {
     if (eventObj.link === 'Edit') {
       this.bsModalRef = this.modalService.show(AdminAccountDetailComponent);
       this.bsModalRef.content.closeBtnName = 'Close';
-      this.dataService.changeMessage(eventObj.rowItem);
+      this.adminAccountService.changeMessage(eventObj.rowItem);
     } else if (eventObj.link === 'Delete') {
       console.log('eventObj.rowItem delete : ', eventObj.rowItem);
       this.deleteData = eventObj.rowItem;
@@ -157,8 +159,6 @@ export class AdminAccountsComponent implements OnInit {
   /**
     * @name deleteAdminAccount
     * @desc delete a particular record from data table
-    * @param {void}
-    * @returns {observale}
     */
   deleteAdminAccount() {
     if (this.deleteData && this.deleteData.adminAccountId) {
@@ -170,13 +170,19 @@ export class AdminAccountsComponent implements OnInit {
 
       return this.http.post(
         this.globalConstants.FI_SERVER_BASE_URL + adminAccountConstants.DELETE_ADMIN_ACCOUNT.URL,
-        requestData, this.httpOptions).subscribe((data: any) => {
-          if (data) {
-            console.log('post data : ', data);
+        requestData, this.httpOptions).subscribe((response: any) => {
+          if (response.statusCode === 0) {
+            this.updateModalConfig('Success', 'Deleted data Successfully ! ', 'success');
+            this.modalService.show(CustomModalComponent, this.modalConfig);
             this.updateTable();
-            alert('Deleted data Successfully !');
           }
         }, error => this.error = error);
     }
+  }
+
+  updateModalConfig(header: string, msg: string, type: string) {
+    this.modalConfig.initialState.header = header;
+    this.modalConfig.initialState.message = msg;
+    this.modalConfig.initialState.type = type;
   }
 }

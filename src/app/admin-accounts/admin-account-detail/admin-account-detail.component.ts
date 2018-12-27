@@ -2,11 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { NgForm } from '../../../../../../node_modules/@angular/forms';
 import { IAdminAccount, IAdminGroupsDTOList } from './admin-account-detail';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { adminAccountConstants } from '../../../../constants/admin-account.constants';
 import { GlobalConstants } from '../../../../constants/global-constants';
 import { adminGroupConstants } from '../../../../constants/admin-group.constants';
-import { AdminAccountService } from '../../../../services/administration/admin-account/admin-account.service';
+import { AdminAccountCommunicationService } from '../../../../services/administration/admin-account/admin-account-communication.service';
+import { CustomModalComponent } from '../../../../shared/custom-modal/custom-modal.component';
+import { MODAL_CONFIG } from '../../../../shared/config/custom-modal.config';
 @Component({
   selector: 'app-admin-account-detail',
   templateUrl: './admin-account-detail.component.html',
@@ -21,6 +23,8 @@ export class AdminAccountDetailComponent implements OnInit {
   error: string;
   ADD_NEW_USER = -1;
   updatedata: any;
+  modalConfig: any;
+  msg: string;
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -31,12 +35,14 @@ export class AdminAccountDetailComponent implements OnInit {
   };
 
   constructor(private http: HttpClient, private globalConstants: GlobalConstants,
-    public bsModalRef: BsModalRef, private dataService: AdminAccountService) { }
+    public bsModalRef: BsModalRef, private adminAccountService: AdminAccountCommunicationService, private _modalService: BsModalService) {
+      this.modalConfig = MODAL_CONFIG.BASE_CONFIG;
+    }
 
 
   ngOnInit() {
     this.getAdminGroupList();
-    this.dataService.currentMessage.subscribe(message => {
+    this.adminAccountService.currentMessage.subscribe(message => {
       this.updatedata = message;
       if (this.updatedata) {
         this.model = this.updatedata;
@@ -113,7 +119,6 @@ export class AdminAccountDetailComponent implements OnInit {
     } else {
       reqObj.adminAccountsDTO.adminAccountId = this.ADD_NEW_USER;
     }
-    console.log('reqObj to post : ', reqObj);
     return reqObj;
   }
 
@@ -126,12 +131,25 @@ export class AdminAccountDetailComponent implements OnInit {
   postdataOnSubmit(accountUserDeatil: IAdminAccount) {
     return this.http.post(
       this.globalConstants.FI_SERVER_BASE_URL + adminAccountConstants.SAVE.URL,
-      this.getRequestDataAdminAccount(accountUserDeatil), this.httpOptions).subscribe((data: any) => {
-        if (data) {
+      this.getRequestDataAdminAccount(accountUserDeatil), this.httpOptions).subscribe((response: any) => {
+        if (response.statusCode === 0) {
           this.bsModalRef.hide();
-          console.log('post data : ', data);
-          alert('data posted');
+          this.adminAccountService.refreshAccountTable();
+          this.updateModalConfig('Success', 'data posted successfully! ', 'success');
+          this._modalService.show(CustomModalComponent, this.modalConfig);
         }
       }, error => this.error = error);
+  }
+
+  /**
+    * @name updateModalConfig
+    * @desc modal pop-up to show information
+    * @param {string, string, string}
+    * @returns {void}
+    */
+  updateModalConfig(header: string, msg: string, type: string) {
+    this.modalConfig.initialState.header = header;
+    this.modalConfig.initialState.message = msg;
+    this.modalConfig.initialState.type = type;
   }
 }
