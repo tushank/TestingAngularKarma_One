@@ -53,6 +53,23 @@
               <option *ngFor="let  adminGroupsDTOList of adminGroupsDTOLists" [value]="adminGroupsDTOList.adminGroupId">{{adminGroupsDTOList.adminGroupName}}</option>
             </select>
           </div>
+
+          <!-- module add MatSelectModule 
+          ngOnInit() {
+            this.adminAccount.adminGroupId =  this.adminGroupsDTOLists[0].id;
+          }
+          adminAccountForm.form.patchValue({
+            adminGroupId: this.adminGroupsDTOLists[1].id
+          }); -->
+          <mat-form-field>
+            <mat-select placeholder="Admin Groups" [(ngModel)]="model.adminGroupId" name="adminGroupId">
+              <mat-option *ngFor="let adminGroupsDTOList of adminGroupsDTOLists" [value]="adminGroupsDTOList.adminGroupId">
+                {{adminGroupsDTOList.adminGroupName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
           <button class="btn btn-primary" type="submit">Submit</button>
           <div class="btn" *ngIf="!updatedata">
             <button class="btn" type="reset">Clear</button>

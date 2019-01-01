@@ -46,13 +46,13 @@ export class AdminAccountDetailComponent implements OnInit {
       this.updatedata = message;
       if (this.updatedata) {
         this.model = this.updatedata;
-        this.signupForm.form.patchValue({
-          loginName: this.model.loginName,
-          password: this.model.password,
-          fullName: this.model.fullName,
-          adminDescription: this.model.adminDescription,
-          adminGroupId: this.model.adminGroupName
-        });
+          this.signupForm.form.patchValue({
+            loginName: this.model.loginName,
+            password: this.model.password,
+            fullName: this.model.fullName,
+            adminDescription: this.model.adminDescription,
+            adminGroupId: this.model.adminGroupName
+          });
       }
     });
   }
