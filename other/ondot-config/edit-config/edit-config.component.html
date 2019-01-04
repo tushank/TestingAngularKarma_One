@@ -1,0 +1,47 @@
+<div >
+  <h2 mat-dialog-title>Edit Config</h2>
+    <form (ngSubmit)="signupForm.form.valid && onSubmit(signupForm)" #signupForm="ngForm" novalidate>
+      <mat-grid-list cols="2" rowHeight="4.5:1">
+        <div class="editConfigContainer">
+          <mat-grid-tile>
+            <span>Parameter Name</span>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <span>{{ondotConfigData.parameterName}}</span>
+          </mat-grid-tile>
+        </div>
+
+        <div>
+          <mat-grid-tile>
+            <span>Parameter Value</span>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field>
+              <textarea matInput name="parameterValue" [(ngModel)]="ondotConfigData.parameterValue"required #parameterValue="ngModel"  matTextareaAutosize matAutosizeMinRows=1 matAutosizeMaxRows=5></textarea>              
+              <mat-error *ngIf="parameterValue.invalid && (parameterValue.dirty || parameterValue.touched)">
+                <span *ngIf="parameterValue.errors.required">Paramete Value is
+                  <strong>required</strong>
+                </span>
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+        </div>
+
+        <div>
+            <mat-grid-tile>
+              <span>Encrypt</span>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-checkbox [(ngModel)]="ondotConfigData.encrypt" name="encrypt"></mat-checkbox>
+            </mat-grid-tile>
+          </div>
+
+
+      </mat-grid-list>
+      <div mat-dialog-actions align="end">
+        <button mat-raised-button type="submit">
+          <mat-icon>save</mat-icon>Submit</button>
+          <button mat-button mat-dialog-close cdkFocusInitial><mat-icon>cancel</mat-icon>Cancel</button>
+      </div>
+    </form>
+</div>

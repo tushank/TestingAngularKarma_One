@@ -1,0 +1,8 @@
+<div class="admin-account-container">
+  <div>
+    <button mat-raised-button (click)="openDialog()">Add New</button>
+  </div>
+  <div class="admin-account-table-container">
+      <app-custom-mat-table [tableConfig]="adminAccountTableConfig" [tableData]="adminAccountTableData" [totalRecords]="adminAccountTableData?.length" (linkClickEvent)="handleEvent($event)"></app-custom-mat-table>
+  </div>
+</div>

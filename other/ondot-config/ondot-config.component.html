@@ -1,0 +1,22 @@
+<div class="ondot-config-container">
+    <div class="ondot-config-searchbox-container">
+      <form (ngSubmit)="signupForm.form.valid && onSubmit(signupForm)" #signupForm="ngForm" novalidate>
+        <div>
+            <mat-form-field>
+                <input type="text" id="ondot-config-searchId" matInput placeholder="search" [(ngModel)]="ondotConfig.search" #search="ngModel"
+                name="search" [ngClass]="{ 'is-invalid': signupForm.submitted && search.invalid && search.touched }" required>
+            </mat-form-field>                       
+          <button mat-raised-button type="submit">
+            <mat-icon>search</mat-icon>
+          </button>
+          <div *ngIf="search.invalid && search.touched">
+              <mat-error *ngIf="search.errors.required">Search cannot be empty</mat-error>
+            </div>
+        </div>
+      </form>
+    </div>
+    <div class="ondot-config-table-container">
+      <app-custom-mat-table [tableConfig]="ondotConfigTableConfig" [tableData]="ondotConfigTableData" [totalRecords]="ondotConfigTableData?.length"
+        (linkClickEvent)="handleEvent($event)"></app-custom-mat-table>
+    </div>
+  </div>
